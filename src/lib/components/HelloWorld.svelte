@@ -6,7 +6,7 @@
 
 	const gs = new GlobalState();
 
-	$inspect(gs.greet, gs.name);
+	$inspect(gs.greet, gs.name);// Svelte 5 rune for reactive state logging during development. TODO: Remove before production deployment.
 
 	const handleSubmit = preventDefault(async () => {
 		if (gs.nlen && gs.glen) {
