@@ -142,11 +142,24 @@ Don't update one package at a time blindly. Group them by ecosystem:
 
 ### Step 3: Update one group at a time
 
+> [!IMPORTANT]
+> Before running `npm install <pkg>@latest`, check where the package lives in
+> `package.json`:
+>
+> - If it is in **`dependencies`** → omit the flag: `npm install <pkg>@latest`
+> - If it is in **`devDependencies`** → add the flag: `npm install --save-dev <pkg>@latest`
+>
+> Using the wrong target moves the package between sections and can cause
+> incorrect production bundles or missing tooling in CI.
+
 For each group:
 
 ```bash
-# Example: updating the Svelte core group
+# Example: updating the Svelte core group (devDependencies)
 npm install --save-dev svelte@latest @sveltejs/vite-plugin-svelte@latest svelte-check@latest
+
+# Example: updating a production dependency (dependencies)
+npm install tailwindcss@latest
 
 # Run tests
 npm run test
@@ -263,6 +276,10 @@ cargo outdated --manifest-path src-tauri/Cargo.toml             # Rust
 # ── Update (optimistic) ──
 npx npm-check-updates -u && npm install                         # Frontend (all latest)
 cargo update --manifest-path src-tauri/Cargo.toml               # Rust (semver-safe)
+
+# ── Update (individual — check package.json first!) ──
+npm install <pkg>@latest                                        # If in "dependencies"
+npm install --save-dev <pkg>@latest                             # If in "devDependencies"
 
 # ── Validate ──
 npm run test                                                    # Full pipeline
